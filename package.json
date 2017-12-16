@@ -1,0 +1,23 @@
+{
+  "name": "gsp-red-voznje",
+  "version": "1.0.0",
+  "description": "GSP - Fruskac red voznje",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fruskac/gsp-red-voznje.git"
+  },
+  "author": "Develop DS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fruskac/gsp-red-voznje/issues"
+  },
+  "homepage": "https://github.com/fruskac/gsp-red-voznje#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-promise-router": "^2.0.0"
+  }
+}
