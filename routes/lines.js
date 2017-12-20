@@ -1,12 +1,17 @@
 const router = require('express-promise-router')();
 
-// Controller
-const LineController = require('../controllers/lines');
+const { validateSecret, validateBody, schemas }  = require('../helpers/route');
+
+// controller
+const controller = require('../controllers/lines');
 
 router.route('/')
-  .get(LineController.getLine)
-  .post(LineController.setLine)
-  .put(LineController.updateLine)
-  .delete(LineController.deleteLine);
+  .get(controller.getAll)
+  .post(validateSecret(), validateBody(schemas.lineSchema), controller.create);
+
+router.route('/:id')
+  .get(controller.get)
+  .patch(validateSecret(), validateBody(schemas.lineSchema), controller.update)
+  .delete(validateSecret(), controller.delete);
 
 module.exports = router;

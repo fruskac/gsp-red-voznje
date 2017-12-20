@@ -1,17 +1,73 @@
+const Line = require('../models/line');
+const { createResponseOneLine, createResponseAllLine } = require('../helpers/lines');
+
 module.exports = {
-  getLine: async (req, res, next) => {
-    res.status(200).json({ message: 'TODO: Informations about bus lines' });
+
+  // get list of all records from lines collection
+  getAll: async (req, res, next) => {
+
+    const lines = await Line.find({ });
+
+    if (lines) {
+      res.status(200).json( createResponseAllLine(lines) );
+      return;
+    }
+
+    res.status(404).json({ error: 'Not Found' });
   },
 
-  setLine: async (req, res, next) => {
-    res.status(201).json({ message: 'TODO: Create new bus line' });
+  // get record by id from lines collection
+  get: async (req, res, next) => {
+    const oneLine = await Line.findOne({ _id: req.params.id });
+
+    if (oneLine) {
+      res.status(200).json( createResponseOneLine(oneLine) );
+      return;
+    }
+    
+    res.status(404).json({ error: 'Not Found' });
+  },
+
+  // create new record inside lines collection
+  create: async (req, res, next) => {
+
+    const { number, weekday, saturday, sunday } = req.value.body;
+
+    const newLine = new Line({ number, weekday, saturday, sunday });
+    await newLine.save();
+
+    res.status(201).json({ message: 'Record created successfully' });
   },
   
-  updateLine: async (req, res, next) => {
-    res.status(200).json({ message: 'TODO: Update bus line' });
+  // update record by id inside lines collection
+  update: async (req, res, next) => {
+    const { number, weekday, saturday, sunday } = req.value.body;
+
+    const oneLine = await Line.findOne({ _id: req.params.id });
+    
+    if (oneLine) {
+      await oneLine.set({ number, weekday, saturday, sunday, updated: new Date() });
+      await oneLine.save();
+
+      res.status(200).json({ message: 'Record updated successfully' });
+      return;
+    }
+    
+    res.status(204).json({ error: 'Not Found' });
   },
     
-  deleteLine: async (req, res, next) => {
-    res.status(200).json({ message: 'TODO: Delete bus line' });
+  // delete record by id from lines collection
+  delete: async (req, res, next) => {
+    const oneLine = await Line.findOne({ _id: req.params.id });
+    
+    if (oneLine) {
+      
+      await oneLine.remove();
+
+      res.status(200).json({ message: 'Record deleted successfully' });
+      return;
+    }
+
+    res.status(204).json({ error: 'Not Found' });
   }
 }
